@@ -1,0 +1,64 @@
+# ${APPLICATION_NAME:config-service}
+# ${APPLICATION_PORT:8081}
+# ${PROFILE:prod}
+# ${DISCOVERY_URL:http://localhost:8761/eureka}
+# ${CONFIG_BROKERS::http://127.0.0.1:9092}
+# ${CONFIG_TOPIC:ev.config}
+
+# username: ${GIT_USER}
+# password: ${GIT_PASSWORD}
+# uri: ${GIT_URL}
+# default-label: ${GIT_DEFAULT_LABEL}
+
+spring:
+  application:
+    name: ${APPLICATION_NAME:config-service}
+  kafka:
+    bootstrap-servers: http://${KAFKA_HOST:host.docker.internal}:${KAFKA_PORT:9092}
+  cloud:
+    config:
+      server:
+        git:
+          username: 'gogs'
+          password: 'Carlos.51243'
+          default-label: stable-r2
+          clone-on-start: true
+          uri: http://${GIT_HOST:host.docker.internal}:${GIT_PORT:3000}/gogs/config-data-1.git
+          search-paths: '*'
+      allow-override: true
+      fail-fast: true
+      override-none: true
+    bus:
+      enabled: true
+      destination: 'ev.config'
+      trace:
+        enabled: true
+      refresh:
+        enabled: true
+
+server:
+  port: ${APPLICATION_PORT:8091}
+  name: ${APPLICATION_NAME:config-service}
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 5
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${EUREKA_HOST:host.docker.internal}:${EUREKA_PORT:8761}/eureka/
+
+#Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: false
+    beans:
+      enabled: false
