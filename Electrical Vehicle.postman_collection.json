@@ -1,0 +1,419 @@
+{
+	"info": {
+		"_postman_id": "80a50a0c-2c8d-4baf-9eff-a463d4543913",
+		"name": "Electrical Vehicle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13441371",
+		"_collection_link": "https://www.postman.com/galactic-space-75881/workspace/electricalvehicle/collection/13441371-80a50a0c-2c8d-4baf-9eff-a463d4543913?action=share&source=collection_link&creator=13441371"
+	},
+	"item": [
+		{
+			"name": "ChargingStation. Insert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"// Validate raw body sent in the request, be it form-data or JSON\r",
+							"pm.test(\"`form` should contain the correct form data\", function () {\r",
+							"    pm.expect(json.form).to.be.an('object');\r",
+							"    pm.expect(json.form.foo1).to.eql('bar1');\r",
+							"    pm.expect(json.form.foo2).to.eql('bar2');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientSecret",
+							"value": "WnC9y8kKtVGJkSK2TJMFvhOTLdMbAlht",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "chargingstationservices",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "password_credentials",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/auth",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "ev",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\":\"2c96808d89fd13480189fd14bf860000\",\r\n\t\"chargingStationLocation\":{\r\n\t\t\"id\":\"here:pds:place:840dr5r7-9df1349708914ceba912909970598cf7\",\r\n\t\t\"title\":\"Statue of Liberty of cuba\",\r\n\t\t\"language\":\"en\",\r\n\t\t\"resultType\":\"place\",\r\n\t\t\"distance\":6094.0,\r\n\t\t\"address\":{\r\n\t\t\t\"label\":\"Statue of Liberty, New York, NY 10004, United States\",\r\n\t\t\t\"countryCode\":\"USA\",\r\n\t\t\t\"countryName\":\"United States\",\r\n\t\t\t\"stateCode\":\"NY\",\r\n\t\t\t\"state\":\"New York\",\r\n\t\t\t\"county\":\"New York\",\r\n\t\t\t\"city\":\"New York\",\r\n\t\t\t\"district\":\"Liberty Island\",\"postalCode\":\"10004\"\r\n\t\t},\r\n\t\t\"position\":{\r\n\t\t\t\"lat\":40.68925,\r\n\t\t\t\"lng\":-74.04445\r\n\t\t}\r\n\t},\r\n\t\"chargingStationType\":\"DC\",\r\n\t\"chargingStationPoints\":[\r\n\t\t{\r\n\t\t\t\"chargingPointId\":\"f79c4a32-d097-4e67-a3be-456736472a12\",\r\n\t\t\t\"powerLevel\":20055,\r\n\t\t\t\"status\":\"UNAVAILABLE\"\r\n\t\t},\r\n        {\r\n\t\t\t\"chargingPointId\":\"f79c4a32-d097-4e67-a3be-456736472a12\",\r\n\t\t\t\"powerLevel\":40055,\r\n\t\t\t\"status\":\"AVAILABLE\"\r\n\t\t}\r\n\t],\r\n\t\"chargingPointsAmount\":1,\r\n\t\"chargingStatus\":\"AVAILABLE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/chargingstation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chargingstation"
+					]
+				},
+				"description": "The tests in this request validate that the request body sent as form-data is valid."
+			},
+			"response": []
+		},
+		{
+			"name": "ChargingStation. Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"// Validate raw body sent in the request, be it form-data or JSON\r",
+							"pm.test(\"`form` should contain the correct form data\", function () {\r",
+							"    pm.expect(json.form).to.be.an('object');\r",
+							"    pm.expect(json.form.foo1).to.eql('bar1');\r",
+							"    pm.expect(json.form.foo2).to.eql('bar2');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientSecret",
+							"value": "WnC9y8kKtVGJkSK2TJMFvhOTLdMbAlht",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "chargingstationservices",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "password_credentials",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/auth",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "ev",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\":\"2c96808d89fd13480189fd14bf860000\",\r\n\t\"chargingStationLocation\":{\r\n\t\t\"id\":\"here:pds:place:840dr5r7-9df1349708914ceba912909970598cf7\",\r\n\t\t\"title\":\"Statue of Liberty of USA\",\r\n\t\t\"language\":\"en\",\r\n\t\t\"resultType\":\"place\",\r\n\t\t\"distance\":6094.0,\r\n\t\t\"address\":{\r\n\t\t\t\"label\":\"Statue of Liberty, New York, NY 10004, United States\",\r\n\t\t\t\"countryCode\":\"USA\",\r\n\t\t\t\"countryName\":\"United States\",\r\n\t\t\t\"stateCode\":\"NY\",\r\n\t\t\t\"state\":\"New York\",\r\n\t\t\t\"county\":\"New York\",\r\n\t\t\t\"city\":\"New York\",\r\n\t\t\t\"district\":\"Liberty Island\",\"postalCode\":\"10004\"\r\n\t\t},\r\n\t\t\"position\":{\r\n\t\t\t\"lat\":40.68925,\r\n\t\t\t\"lng\":-74.04445\r\n\t\t}\r\n\t},\r\n\t\"chargingStationType\":\"DC\",\r\n\t\"chargingStationPoints\":[\r\n\t\t{\r\n\t\t\t\"chargingPointId\":\"f79c4a32-d097-4e67-a3be-456736472a12\",\r\n\t\t\t\"powerLevel\":20055,\r\n\t\t\t\"status\":\"UNAVAILABLE\"\r\n\t\t},\r\n        {\r\n\t\t\t\"chargingPointId\":\"f79c4a32-d097-4e67-a3be-456736472a12\",\r\n\t\t\t\"powerLevel\":40055,\r\n\t\t\t\"status\":\"AVAILABLE\"\r\n\t\t}\r\n\t],\r\n\t\"chargingPointsAmount\":1,\r\n\t\"chargingStatus\":\"UNAVAILABLE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/chargingstation/4028108e8a152ff2018a153796aa0001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chargingstation",
+						"4028108e8a152ff2018a153796aa0001"
+					]
+				},
+				"description": "The tests in this request validate that the request body sent as form-data is valid."
+			},
+			"response": []
+		},
+		{
+			"name": "ChargingStation. DELETE by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"// Validate raw body sent in the request, be it form-data or JSON\r",
+							"pm.test(\"`form` should contain the correct form data\", function () {\r",
+							"    pm.expect(json.form).to.be.an('object');\r",
+							"    pm.expect(json.form.foo1).to.eql('bar1');\r",
+							"    pm.expect(json.form.foo2).to.eql('bar2');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "WnC9y8kKtVGJkSK2TJMFvhOTLdMbAlht",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "chargingstationservices",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "password_credentials",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/auth",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "ev",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/chargingstation/4028108e8a152ff2018a1535d2050000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chargingstation",
+						"4028108e8a152ff2018a1535d2050000"
+					]
+				},
+				"description": "The tests in this request validate that the request body sent as form-data is valid."
+			},
+			"response": []
+		},
+		{
+			"name": "ChargingStation. GET ALL",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "WnC9y8kKtVGJkSK2TJMFvhOTLdMbAlht",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "chargingstationservices",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "password_credentials",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:9080/realms/electrical-vehicle/protocol/openid-connect/auth",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "ev",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/chargingstation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chargingstation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ChargingStation. GET AVAILABLES",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/chargingstation/available",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chargingstation",
+						"available"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
