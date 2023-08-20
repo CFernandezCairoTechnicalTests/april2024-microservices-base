@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME:gateway-service}
+  kafka:
+    bootstrap-servers: http://${KAFKA_HOST:host.docker.internal}:${KAFKA_PORT:9092}
+  cloud:
+    config:
+      enabled: true
+      uri: http://${CONFIG_HOST:host.docker.internal}:${CONFIG_PORT:8091}
+    bus:
+      enabled: true
+      destination: 'ev.config'
+      trace:
+        enabled: true
+      refresh:
+        enabled: true
+
+server:
+  port: ${APPLICATION_PORT:8080}
+  name: ${APPLICATION_NAME:gateway-service}
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 5
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    hostname: localhost
+    status-page-url: https://${EUREKA_HOST:host.docker.internal}:${EUREKA_PORT:8761}/actuator/info
+    health-check-url: https://${EUREKA_HOST:host.docker.internal}:${EUREKA_PORT:8761}/actuator/health
+    home-page-url: https://${EUREKA_HOST:host.docker.internal}:${EUREKA_PORT:8761}
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${EUREKA_HOST:host.docker.internal}:${EUREKA_PORT:8761}/eureka/
+
+zipkin:
+  baseurl: http://${ZIPKIN_HOST:host.docker.internal}:${ZIPKIN_PORT:9411}
+  sample:
+    probability: 1.0
+
+#bus-config:
+#  binder: kafka
+#  destination: 'ev.config'
+#  brokers: http://${KAFKA_HOST:host.docker.internal}:${KAFKA_PORT:9092}
