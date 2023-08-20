@@ -3,17 +3,17 @@ version: '3.8'
 volumes:
   postgresql_data:
     driver: local
-  sql-data:
+  ev_rc1_sql-data:
     driver: local
-  redis-data:
+  ev_rc1_redis-data:
     driver: local
-  git-data:
+  ev_rc1_git-data:
     driver: local	
-  zookeeper-data:
+  ev_rc1_zookeeper-data:
     driver: local
-  zookeeper-log:
+  ev_rc1_zookeeper-log:
     driver: local
-  kafka-data:
+  ev_rc1_kafka-data:
     driver: local	
 
 services:
@@ -52,8 +52,8 @@ services:
       - "2181:2181"
     restart: unless-stopped
     volumes:
-      - zookeeper-data:/var/lib/zookeeper/data:Z
-      - zookeeper-log:/var/lib/zookeeper/log:Z
+      - ev_rc1_zookeeper-data:/var/lib/zookeeper/data:Z
+      - ev_rc1_zookeeper-log:/var/lib/zookeeper/log:Z
     environment:
       ZOOKEEPER_CLIENT_PORT: '2181'
       ZOOKEEPER_ADMIN_ENABLE_SERVER: 'false'
@@ -68,7 +68,7 @@ services:
       - "9092:9092"
     restart: on-failure
     volumes:
-      - kafka-data:/var/lib/kafka/data:Z
+      - ev_rc1_kafka-data:/var/lib/kafka/data:Z
     environment:
       KAFKA_BROKER_ID: '0'
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -117,31 +117,31 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - sql-data:/var/lib/mysql:Z
+      - ev_rc1_sql-data:/var/lib/mysql:Z
     environment:
       MYSQL_ROOT_PASSWORD: password
     healthcheck:
       test: "exit 0"
     networks:
       - 'dockernetflix-network'
-  git-server:
-    image: gogs/gogs:latest
-    restart: on-failure
-    container_name: git-server
-    hostname: git-server
-    ports:
-      - '22:22'
-      - '3000:3000'
-    #network_mode: host
-    networks:
-      - 'dockernetflix-network'
-    volumes:
-      - git-data:/data:Z
-    healthcheck:
-      test: "exit 0"
-    depends_on:
-      sql-server:
-        condition: service_healthy
+#  git-server:
+#    image: gogs/gogs:latest
+#    restart: on-failure
+#    container_name: git-server
+#    hostname: git-server
+#    ports:
+#      - '22:22'
+#      - '3000:3000'
+#    #network_mode: host
+#    networks:
+#      - 'dockernetflix-network'
+#    volumes:
+#      - ev_rc1_git-data:/data:Z
+#    healthcheck:
+#      test: "exit 0"
+#    depends_on:
+#      sql-server:
+#        condition: service_healthy
   sql-ui:
     image: phpmyadmin:latest
     restart: unless-stopped
@@ -167,7 +167,7 @@ services:
     healthcheck:
       test: "exit 0"
     volumes:
-      - 'postgresql_data:/bitnami/postgresql'
+      - C:/Users/Carlos/Desktop/microservices-base_postgresql_data/bitnami/postgresql2:/bitnami/postgresql
   keycloak:
     image: docker.io/bitnami/keycloak:latest
     restart: on-failure
@@ -295,7 +295,7 @@ services:
     image: redis:latest
     command: redis-server --save 20 1 --loglevel warning
     volumes:
-      - redis-data:/data:Z
+      - ev_rc1_redis-data:/data:Z
     restart: always
     container_name: redis-server
     hostname: redis-server
