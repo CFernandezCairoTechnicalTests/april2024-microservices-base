@@ -19,11 +19,9 @@ spring:
     config:
       server:
         git:
-          username: 'gogs'
-          password: 'Carlos.51243'
-          default-label: stable-r2
+          default-label: main
           clone-on-start: true
-          uri: http://${GIT_HOST:host.docker.internal}:${GIT_PORT:3000}/gogs/config-data-1.git
+          uri: https://github.com/EVChargingStationTechnicalTest/config-data.git
           search-paths: '*'
       allow-override: true
       fail-fast: true
