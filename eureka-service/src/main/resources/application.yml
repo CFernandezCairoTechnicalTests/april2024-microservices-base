@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME:eureka-service}
+
+server:
+  port: ${APPLICATION_PORT:8761}
+
+eureka:
+  server:
+    wait-time-in-ms-when-sync-empty: 0
+    enable-self-preservation: false
+  instance:
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 10
+    lease-renewal-interval-in-seconds: 10
+    appname: ${spring.application.name}
+    hostname: ${EUREKA_HOST:localhost}
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+#Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: false
+    beans:
+      enabled: false
+logging:
+  level:
+    org.springframework: INFO
+    com.netflix.eureka: INFO
