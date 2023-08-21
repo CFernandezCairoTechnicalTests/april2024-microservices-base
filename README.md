@@ -1,7 +1,7 @@
 #Electrical Vehicle miroservices architecture
 
 ### Configure keycloak
-1. Download from Drive ...
+1. Download from Drive https://drive.google.com/file/d/1xgvuy10va4pICUljUjiq2POjDuj5T4G6/view?usp=drive_link
 2. Modify postgres volume "- C:/Users/Carlos/Desktop/microservices-base_postgresql_data/bitnami/postgresql2:/bitnami/postgresql" for "- downloaded_volume:/bitnami/postgresql"
 3. docker-compose up postgresql keycloak
 4. Authenticate [user:bitnami] in http://localhost:9080/admin
