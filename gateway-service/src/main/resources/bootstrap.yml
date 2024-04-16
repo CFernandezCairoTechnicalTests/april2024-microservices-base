@@ -40,8 +40,3 @@ zipkin:
   baseurl: http://${ZIPKIN_HOST:host.docker.internal}:${ZIPKIN_PORT:9411}
   sample:
     probability: 1.0
-
-#bus-config:
-#  binder: kafka
-#  destination: 'ev.config'
-#  brokers: http://${KAFKA_HOST:host.docker.internal}:${KAFKA_PORT:9092}

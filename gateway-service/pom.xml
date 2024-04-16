@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ev.microservices</groupId>
-        <artifactId>microservice-base</artifactId>
-        <version>1.0.0</version>
+        <groupId>dev.cfernandezcairo</groupId>
+        <artifactId>wastemanager-microservice-base</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ev.microservices</groupId>
-    <artifactId>gateway-service</artifactId>
+    <groupId>dev.cfernandezcairo</groupId>
+    <artifactId>wastemanager-gateway-service</artifactId>
     <version>1.0.0</version>
     <name>gateway-service</name>
     <description>Gateway Server</description>
@@ -120,7 +120,7 @@
                 <configuration>
                     <layout>ZIP</layout>
                     <executable>true</executable>
-                    <mainClass>com.ev.microservices.GatewayApplication</mainClass>
+                    <mainClass>dev.cfernandezcairo.microservices.GatewayApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
