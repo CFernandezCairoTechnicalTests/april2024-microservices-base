@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ev.microservices</groupId>
-        <artifactId>microservice-base</artifactId>
-        <version>1.0.0</version>
+        <groupId>dev.cfernandezcairo</groupId>
+        <artifactId>wastemanager-microservice-base</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ev.microservices</groupId>
-    <artifactId>config-service</artifactId>
+    <groupId>dev.cfernandezcairo</groupId>
+    <artifactId>wastemanager-config-service</artifactId>
     <version>1.0.0</version>
     <name>config-service</name>
     <description>Config Server</description>

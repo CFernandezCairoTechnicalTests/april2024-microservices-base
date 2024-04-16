@@ -21,14 +21,14 @@ spring:
         git:
           default-label: main
           clone-on-start: true
-          uri: https://github.com/EVChargingStationTechnicalTest/config-data.git
+          uri: https://github.com/cfernandezcairo/april2024-config-data.git
           search-paths: '*'
       allow-override: true
       fail-fast: true
       override-none: true
     bus:
       enabled: true
-      destination: 'ev.config'
+      destination: 'april2024.config'
       trace:
         enabled: true
       refresh:
