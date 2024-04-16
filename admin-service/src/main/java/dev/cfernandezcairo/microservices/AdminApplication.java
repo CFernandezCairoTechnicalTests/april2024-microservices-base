@@ -1,4 +1,4 @@
-package com.ev.microservices;
+package dev.cfernandezcairo.microservices;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
