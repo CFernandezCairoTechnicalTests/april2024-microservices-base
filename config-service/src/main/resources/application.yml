@@ -21,7 +21,7 @@ spring:
         git:
           default-label: main
           clone-on-start: true
-          uri: https://github.com/cfernandezcairo/april2024-config-data.git
+          uri: https://github.com/CFernandezCairoTechnicalTests/april2024-config-data
           search-paths: '*'
       allow-override: true
       fail-fast: true
