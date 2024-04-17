@@ -112,19 +112,6 @@ services:
     networks:
       - 'dockernetflix-network'
 
-  zipkin-server:
-    image: openzipkin/zipkin:latest
-    restart: always
-    container_name: zipkin-server-wastemanager-techtest
-    hostname: zipkin-server
-    healthcheck:
-      test: "exit 0"
-    ports:
-      - '9410:9410'
-      - '9411:9411'
-    networks:
-      - 'dockernetflix-network'
-
   eureka-server:
     image: april2024/base/server-eureka:latest
     build:
@@ -219,10 +206,34 @@ services:
       CONFIG_PORT: 8091
       EUREKA_HOST: host.docker.internal
       EUREKA_PORT: 8761
-      ZIPKIN_HOST: host.docker.internal
-      ZIPKIN_PORT: 9411
     healthcheck:
       test: "exit 0"
+
+  wastemanager-service:
+    image: april2024/wastemanager:latest
+    restart: always
+    container_name: wastemanager-service
+    hostname: wastemanager-service
+    networks:
+      - 'dockernetflix-network'
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      gateway-server:
+        condition: service_healthy
+    environment:
+      TZ: Africa/Abidjan
+      hostName: wastemanager-service
+      CONFIG_HOST: host.docker.internal
+      CONFIG_PORT: 8091
+      EUREKA_HOST: host.docker.internal
+      EUREKA_PORT: 8761
+      MYSQL_HOST: host.docker.internal
+      MYSQL_PORT: 3306
+      KAFKA_HOST: host.docker.internal
+      KAFKA_PORT: 9092
 
 networks:
   dockernetflix-network: #necesitamos crear en una red para alojar los servicios en ella y que puedan comunicarse entre sí
