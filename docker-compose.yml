@@ -157,31 +157,6 @@ services:
     healthcheck:
       test: "exit 0"
 
-  admin-server:
-    image: april2024/base/server-admin:latest
-    build:
-      context: admin-service
-      dockerfile: ./src/main/docker/Dockerfile
-    restart: on-failure
-    container_name: admin-server-wastemanager-techtest
-    hostname: admin-server
-    networks:
-      - 'dockernetflix-network'
-    ports:
-      - '8095:8095'
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-    environment:
-      management.context-path: /admin
-      hostName: admin-server
-      EUREKA_HOST: host.docker.internal
-      EUREKA_PORT: 8761
-      GATEWAY_HOST: host.docker.internal
-      GATEWAY_PORT: 8080
-    healthcheck:
-      test: "exit 0"
-
   gateway-server:
     image: april2024/base/server-gateway:latest
     build:
