@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ev.microservices</groupId>
-        <artifactId>microservice-base</artifactId>
-        <version>1.0.0</version>
+        <groupId>dev.cfernandezcairo</groupId>
+        <artifactId>wastemanager-microservice-base</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ev.microservices</groupId>
-    <artifactId>eureka-service</artifactId>
+    <groupId>dev.cfernandezcairo</groupId>
+    <artifactId>wastemanager-eureka-service</artifactId>
     <version>1.0.0</version>
     <name>eureka-service</name>
     <description>Registry/Discovery Server</description>

@@ -9,7 +9,7 @@ spring:
       uri: http://${CONFIG_HOST:host.docker.internal}:${CONFIG_PORT:8091}
     bus:
       enabled: true
-      destination: 'ev.config'
+      destination: 'april2024.config'
       trace:
         enabled: true
       refresh:
@@ -35,13 +35,3 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://${EUREKA_HOST:host.docker.internal}:${EUREKA_PORT:8761}/eureka/
-
-zipkin:
-  baseurl: http://${ZIPKIN_HOST:host.docker.internal}:${ZIPKIN_PORT:9411}
-  sample:
-    probability: 1.0
-
-#bus-config:
-#  binder: kafka
-#  destination: 'ev.config'
-#  brokers: http://${KAFKA_HOST:host.docker.internal}:${KAFKA_PORT:9092}

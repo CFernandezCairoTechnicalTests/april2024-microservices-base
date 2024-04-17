@@ -3,25 +3,92 @@ version: '3.8'
 volumes:
   postgresql_data:
     driver: local
-  ev_rc1_sql-data:
+  april2024_rc_sql-data:
     driver: local
-  ev_rc1_redis-data:
+  april2024_rc_redis-data:
     driver: local
-  ev_rc1_git-data:
+  april2024_rc_git-data:
     driver: local	
-  ev_rc1_zookeeper-data:
+  april2024_rc_zookeeper-data:
     driver: local
-  ev_rc1_zookeeper-log:
+  april2024_rc_zookeeper-log:
     driver: local
-  ev_rc1_kafka-data:
+  april2024_rc_kafka-data:
     driver: local	
 
 services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION:-latest}
+    container_name: zookeeper-wastemanager-techtest
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+    volumes:
+      - april2024_rc_zookeeper-data:/var/lib/zookeeper/data:Z
+      - april2024_rc_zookeeper-log:/var/lib/zookeeper/log:Z
+    environment:
+      ZOOKEEPER_CLIENT_PORT: '2181'
+      ZOOKEEPER_ADMIN_ENABLE_SERVER: 'false'
+    healthcheck:
+      test: "exit 0"
+    networks:
+      - 'dockernetflix-network'
+
+  kafka:
+      image: confluentinc/cp-kafka:${CONFLUENT_VERSION:-latest}
+      container_name: kafka-wastemanager-techtest
+      ports:
+        - "9092:9092"
+      restart: on-failure
+      volumes:
+        - april2024_rc_kafka-data:/var/lib/kafka/data:Z
+      environment:
+        KAFKA_BROKER_ID: '0'
+        KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+        KAFKA_NUM_PARTITIONS: '12'
+        KAFKA_COMPRESSION_TYPE: 'gzip'
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+        KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: '1'
+        KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: '1'
+        KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka-wastemanager-techtest:9092'
+        KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+        KAFKA_JMX_PORT: '9091'
+        KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+        KAFKA_AUTHORIZER_CLASS_NAME: 'kafka.security.authorizer.AclAuthorizer'
+        KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: 'true'
+      healthcheck:
+        test: "exit 0"
+      depends_on:
+        zookeeper:
+          condition: service_healthy
+      networks:
+        - 'dockernetflix-network'
+
+  schema-registry:
+      image: confluentinc/cp-schema-registry:${CONFLUENT_VERSION:-latest}
+      container_name: schema-wastemanager-techtest
+      ports:
+        - "8085:8085"
+      restart: on-failure
+      depends_on:
+        kafka:
+          condition: service_healthy
+      environment:
+        SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'PLAINTEXT://kafka:9092'
+        SCHEMA_REGISTRY_HOST_NAME: 'schema-registry'
+        SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8085'
+        SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: 'INFO'
+      healthcheck:
+        test: "exit 0"
+      networks:
+        - 'dockernetflix-network'
+
   akhq:
     # build:
     #   context: .
     image: tchiotludo/akhq
-    container_name: akhq-0
+    container_name: akhq-wastemanager-techtest
     restart: unless-stopped
     environment:
       AKHQ_CONFIGURATION: |
@@ -45,161 +112,13 @@ services:
     networks:
       - 'dockernetflix-network'
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:${CONFLUENT_VERSION:-latest}
-    container_name: zookeeper-0
-    ports:
-      - "2181:2181"
-    restart: unless-stopped
-    volumes:
-      - ev_rc1_zookeeper-data:/var/lib/zookeeper/data:Z
-      - ev_rc1_zookeeper-log:/var/lib/zookeeper/log:Z
-    environment:
-      ZOOKEEPER_CLIENT_PORT: '2181'
-      ZOOKEEPER_ADMIN_ENABLE_SERVER: 'false'
-    healthcheck:
-      test: "exit 0"
-    networks:
-      - 'dockernetflix-network'
-  kafka:
-    image: confluentinc/cp-kafka:${CONFLUENT_VERSION:-latest}
-    container_name: kafka-0
-    ports:
-      - "9092:9092"
-    restart: on-failure
-    volumes:
-      - ev_rc1_kafka-data:/var/lib/kafka/data:Z
-    environment:
-      KAFKA_BROKER_ID: '0'
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_NUM_PARTITIONS: '12'
-      KAFKA_COMPRESSION_TYPE: 'gzip'
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: '1'
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: '1'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka-0:9092'
-      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
-      KAFKA_JMX_PORT: '9091'
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_AUTHORIZER_CLASS_NAME: 'kafka.security.authorizer.AclAuthorizer'
-      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: 'true'
-    healthcheck:
-      test: "exit 0"
-    depends_on:
-      zookeeper:
-        condition: service_healthy
-    networks:
-      - 'dockernetflix-network'
-  schema-registry:
-    image: confluentinc/cp-schema-registry:${CONFLUENT_VERSION:-latest}
-    container_name: schema-0
-    ports:
-      - "8085:8085"
-    restart: on-failure
-    depends_on:
-      kafka:
-        condition: service_healthy
-    environment:
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'PLAINTEXT://kafka:9092'
-      SCHEMA_REGISTRY_HOST_NAME: 'schema-registry'
-      SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8085'
-      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: 'INFO'
-    healthcheck:
-      test: "exit 0"
-    networks:
-      - 'dockernetflix-network'
-
-  sql-server:
-    image: mysql:latest
-    restart: unless-stopped
-    container_name: sql-server
-    hostname: sql-server
-    ports:
-      - '3306:3306'
-    volumes:
-      - ev_rc1_sql-data:/var/lib/mysql:Z
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    healthcheck:
-      test: "exit 0"
-    networks:
-      - 'dockernetflix-network'
-#  git-server:
-#    image: gogs/gogs:latest
-#    restart: on-failure
-#    container_name: git-server
-#    hostname: git-server
-#    ports:
-#      - '22:22'
-#      - '3000:3000'
-#    #network_mode: host
-#    networks:
-#      - 'dockernetflix-network'
-#    volumes:
-#      - ev_rc1_git-data:/data:Z
-#    healthcheck:
-#      test: "exit 0"
-#    depends_on:
-#      sql-server:
-#        condition: service_healthy
-  sql-ui:
-    image: phpmyadmin:latest
-    restart: unless-stopped
-    container_name: sql-ui
-    environment:
-      PMA_HOST: host.docker.internal
-    hostname: sql-ui
-    ports:
-      - "8989:80"
-    networks:
-      - 'dockernetflix-network'
-    depends_on:
-      sql-server:
-        condition: service_healthy
-
-  postgresql:
-    image: docker.io/bitnami/postgresql:latest
-    restart: unless-stopped
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - POSTGRESQL_USERNAME=bn_keycloak
-      - POSTGRESQL_DATABASE=bitnami_keycloak
-    healthcheck:
-      test: "exit 0"
-    volumes:
-      - C:/Users/Carlos/Desktop/microservices-base_postgresql_data/bitnami/postgresql2:/bitnami/postgresql
-  keycloak:
-    image: docker.io/bitnami/keycloak:latest
-    restart: on-failure
-    ports:
-      - "9080:8080"
-    environment:
-      - KEYCLOAK_CREATE_ADMIN_USER=true
-      #- KEYCLOAK_ADMIN_USER=user
-      #- KEYCLOAK_ADMIN_PASSWORD=bitnami
-    depends_on:
-      postgresql:
-        condition: service_healthy
-
-  zipkin-server:
-    image: openzipkin/zipkin:latest
-    restart: always
-    container_name: zipkin-server
-    hostname: zipkin-server
-    healthcheck:
-      test: "exit 0"
-    ports:
-      - '9410:9410'
-      - '9411:9411'
-    networks:
-      - 'dockernetflix-network'
   eureka-server:
-    image: ev/base/server-eureka:latest
+    image: april2024/base/server-eureka:latest
     build:
       context: ./eureka-service
       dockerfile: ./src/main/docker/Dockerfile
     restart: always
-    container_name: eureka-server
+    container_name: eureka-server-wastemanager-techtest
     hostname: eureka-server
     healthcheck:
       test: "exit 0"
@@ -207,13 +126,14 @@ services:
       - '8761:8761'
     networks:
       - 'dockernetflix-network'
+
   config-server:
-    image: ev/base/server-config:latest
+    image: april2024/base/server-config:latest
     build:
       context: ./config-service
       dockerfile: ./src/main/docker/Dockerfile
     restart: on-failure
-    container_name: config-server
+    container_name: config-server-wastemanager-techtest
     hostname: config-server
     #network_mode: host
     #extra_hosts:
@@ -228,45 +148,22 @@ services:
     environment:
       management.context-path: /config
       hostName: config-server
-      GIT_HOST: host.docker.internal
-      GIT_PORT: 3000
+      #GIT_HOST: host.docker.internal
+      #GIT_PORT: 3000
       EUREKA_HOST: host.docker.internal
       EUREKA_PORT: 8761
       KAFKA_HOST: host.docker.internal
       KAFKA_PORT: 9092
     healthcheck:
       test: "exit 0"
-  admin-server:
-    image: ev/base/server-admin:latest
-    build:
-      context: admin-service
-      dockerfile: ./src/main/docker/Dockerfile
-    restart: on-failure
-    container_name: admin-server
-    hostname: admin-server
-    networks:
-      - 'dockernetflix-network'
-    ports:
-      - '8095:8095'
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-    environment:
-      management.context-path: /admin
-      hostName: admin-server
-      EUREKA_HOST: host.docker.internal
-      EUREKA_PORT: 8761
-      GATEWAY_HOST: host.docker.internal
-      GATEWAY_PORT: 8080
-    healthcheck:
-      test: "exit 0"
+
   gateway-server:
-    image: ev/base/server-gateway:latest
+    image: april2024/base/server-gateway:latest
     build:
       context: ./gateway-service
       dockerfile: ./src/main/docker/Dockerfile
     restart: always
-    container_name: gateway-server
+    container_name: gateway-server-wastemanager-techtest
     hostname: gateway-server
     networks:
       - 'dockernetflix-network'
@@ -284,35 +181,14 @@ services:
       CONFIG_PORT: 8091
       EUREKA_HOST: host.docker.internal
       EUREKA_PORT: 8761
-      KAFKA_HOST: host.docker.internal
-      KAFKA_PORT: 9092
-      ZIPKIN_HOST: host.docker.internal
-      ZIPKIN_PORT: 9411
     healthcheck:
       test: "exit 0"
 
-  redis-server:
-    image: redis:latest
-    command: redis-server --save 20 1 --loglevel warning
-    volumes:
-      - ev_rc1_redis-data:/data:Z
+  wastemanager-service:
+    image: april2024/wastemanager:latest
     restart: always
-    container_name: redis-server
-    hostname: redis-server
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      # - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
-    healthcheck:
-      test: "exit 0"
-    ports:
-      - '6379:6379'
-    networks:
-      - 'dockernetflix-network'
-  chargingstation-service:
-    image: ev/chargingstation:latest
-    restart: always
-    container_name: chargingstation-service
-    hostname: chargingstation-service
+    container_name: wastemanager-service
+    hostname: wastemanager-service
     networks:
       - 'dockernetflix-network'
     depends_on:
@@ -322,13 +198,9 @@ services:
         condition: service_healthy
       gateway-server:
         condition: service_healthy
-      sql-server:
-        condition: service_healthy
-      redis-server:
-        condition: service_healthy
     environment:
       TZ: Africa/Abidjan
-      hostName: chargingstation-service
+      hostName: wastemanager-service
       CONFIG_HOST: host.docker.internal
       CONFIG_PORT: 8091
       EUREKA_HOST: host.docker.internal
@@ -337,7 +209,6 @@ services:
       MYSQL_PORT: 3306
       KAFKA_HOST: host.docker.internal
       KAFKA_PORT: 9092
-      ZIPKIN_HOST: host.docker.internal
-      ZIPKIN_PORT: 9411
+
 networks:
   dockernetflix-network: #necesitamos crear en una red para alojar los servicios en ella y que puedan comunicarse entre sí
